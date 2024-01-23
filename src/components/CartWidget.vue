@@ -3,10 +3,8 @@
 import { ref } from "vue";
 import CartItem from "./CartItem.vue";
 import { useCartStore } from "../stores/CartStore";
-import {AuthUserStore} from "../stores/AuthUserStore"
 
 const cartStore = useCartStore();
-const authStore = AuthUserStore();
 
 // data
 const active = ref(false);
@@ -35,7 +33,7 @@ const active = ref(false);
         </div>
         <div class="flex justify-end">
           <AppButton class="secondary mr-2" @click="cartStore.$reset()">Clear Cart</AppButton>
-          <AppButton class="primary" @click="authStore.checkout()">Checkout</AppButton>
+          <AppButton class="primary" @click="() => cartStore.checkout()">Checkout</AppButton>
         </div>
       </div>
       <!-- Uncomment and use condition to show when cart is empty -->

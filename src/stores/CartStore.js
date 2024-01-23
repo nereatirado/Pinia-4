@@ -1,11 +1,14 @@
-import { defineStore } from "pinia";
+import { defineStore , acceptHMRUpdate} from "pinia";
 import { groupBy } from "lodash";
 import {useAuthUserStore} from "@/stores/AuthUserStore.js"
+import {useLocalStorage} from "@vueuse/core"
 
 export const useCartStore = defineStore("CartStore", {
+    historyEnabled: true,
     state: () => {
         return {
-            items: [],
+            // items: [],
+            items: useLocalStorage("CartStore:items",[]),
         };
     },
     actions:{
@@ -15,6 +18,15 @@ export const useCartStore = defineStore("CartStore", {
                 this.items.push({...item});
             }
         },
+        //ERRORES 
+        // addItems(count,item){
+        //     throw new Error("example error");
+        //     count=parseInt(count);
+        //     for(let index=0;index<count;index++){
+        //         this.items.push({...item});
+        //         //this.items.push(item);
+        //     }
+        // },
         clearItem(name){
             this.items=this.items.filter((item) => item.name != name);
         },
@@ -36,4 +48,8 @@ export const useCartStore = defineStore("CartStore", {
         compraTotal: (state)=>state.items.reduce((total, valorInicial)=> total+valorInicial?.price,0)
     }
 });
+if(import.meta.hot){
+    import.meta.hot.accept(acceptHMRUpdate(useCartStore,import.meta.hot));
+ }
+    
 
